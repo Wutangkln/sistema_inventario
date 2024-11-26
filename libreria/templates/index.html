@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block titulo %} Lista de libros {% endblock %}
+
+{% block contenido %}
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">Lista de libros</h4>
+    </div>
+
+    <div class="card-body">
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="busqueda" value="{{ request.GET.busqueda }}" placeholder="Buscar por título">
+                <button class="btn btn-outline-light bg-dark" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-primary">
+                    <tr class="text-center">
+                        <th scope="col">ID</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Disponibilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for libro in libros %}
+                    <tr>
+                        <td class="text-center">{{ libro.id }}</td>
+                        <td>{{ libro.titulo }}</td>
+                        <td class="text-center">
+                            <img src="{{ libro.imagen.url }}" height="100" width="100" alt="Imagen de {{ libro.titulo }}" class="rounded">
+                        </td>
+                        <td>{{ libro.descripcion }}</td>
+                        <td class="text-center">
+                            {% if libro.estado == 'Disponible' %}
+                                <span class="btn btn-outline-dark btn-sm disabled btn-estado">Disponible</span>
+                            {% else %}
+                                <span class="btn btn-sm  bg-danger btn-estado">No Disponible</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <span class="btn btn-danger btn-sm disabled">No se encontraron libros con ese título.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer text-muted text-center">
+        <small>LIBRERIA MAEB</small>
+    </div>
+</div>
+
+{% endblock %}
